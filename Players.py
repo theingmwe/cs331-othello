@@ -101,7 +101,23 @@ class AlphaBetaPlayer(Player):
         # Write function that takes the current state and generates all successors obtained by legal moves
         # type:(board, player_symbol) -> (list)
         successors = []
-        return successors 
+
+        if board.has_legal_moves_remaining(player_symbol) == False:
+            return successors
+
+        #go through the whole board
+        for col in range(board.cols):
+            for row in range (board.rows):
+                #if move is legal at (col, row)
+                if board.is_legal_move(player_symbol):
+                    #make a clone of the board
+                    new_board = board.cloneOBoard()
+                    #generate a move on the new board
+                    new_board.play_move(col, row, player_symbol)
+                    #add it to list of possible moves
+                    successors.append(new_board)
+
+        return successors
 
 
     def get_move(self, board):
