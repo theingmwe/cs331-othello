@@ -102,9 +102,11 @@ class AlphaBetaPlayer(Player):
         # type:(board, player_symbol) -> (list)
         successors = []
 
+        #if there are no more legal moves left for the player, return empty list
         if board.has_legal_moves_remaining(player_symbol) == False:
             return successors
 
+        #if there are still legal moves left
         #go through the whole board
         for col in range(board.cols):
             for row in range (board.rows):
