@@ -78,48 +78,105 @@ class AlphaBetaPlayer(Player):
 
 
     def alphabeta(self, board):
+
         # Write minimax function here using eval_board and get_successors
         # type:(board) -> (int, int)
-        col, row = 0, 0
-        return col, row
+        column, row = 0, 0
 
+        startingValue = -float('inf')
 
-    def eval_board(self, board):
-        # Write eval function here
-        # type:(board) -> (float)
+        # Replace starting value if there is a higher value
+        for position in self.get_successors(board, self.symbol):
+            currentValue = self.min_value(position)
+            if startingValue < currentValue:
+                startingValue = currentValue
+                column = position.move[0]
+                row = position.move[1]
+
+        # If no higher value is found then use the last highest value
+        if startingValue == -float('inf'):
+            currentState = self.get_successors(board, self.symbol)[0]
+            column = position.move[0]
+            row = position.move[1]
+
+        return column, row
+
+    def max_value(self, board, alpha=-float('inf'), beta=float('inf'), depth=0) -> float:
+
+        # Keep track of the number of node seen
+        self.total_nodes_seen = self.total_nodes_seen + 1
+
+        # If we've reached a terminal state or max depth
+        if self.terminal_state(board):
+            return self.terminal_value(board)
+        elif depth == self.max_depth:
+            return self.eval_board(board)
+
+        startingValue = -float('inf')
+
+        # Recursively find the best value out of all the successors
+        for position in self.get_successors(board, self.symbol):
+            startingValue = max(startingValue, self.min_value(position, alpha, beta, depth+1))
+
+            if self.prune == '1' and startingValue >= beta:
+                return startingValue
+            alpha = max(alpha, startingValue)
+
+        return startingValue
+
+    def min_value(self, board, alpha=-float('inf'), beta=float('inf'), depth=0) -> float:
+
+        # Keep track of the number of node seen
+        self.total_nodes_seen = self.total_nodes_seen + 1
+
+        # If we've reached a terminal state or max depth
+        if self.terminal_state(board):
+            return self.terminal_value(board)
+        elif depth == self.max_depth:
+            return self.eval_board(board)
+
+        startingValue = float('inf')
+
+        # Recursively find the worst value out of all the successors
+        for position in self.get_successors(board, self.oppSym):
+            startingValue = min(startingValue, self.max_value(position, alpha, beta, depth+1))
+
+            if self.prune == '1' and startingValue <= alpha:
+                return startingValue
+            beta = min(beta, startingValue)
+
+        return startingValue
+
+    def eval_board(self, board) -> float:
         value = 0
-        if self.eval_type == 0:
-            value = 0
-        elif self.eval_type == 1:
-            value = 1
-        elif self.eval_type == 2:
-            value = 2
+        if self.eval_type == '0':
+            value = board.count_score(self.symbol) - board.count_score(self.oppSym)
+        elif self.eval_type == '1':
+            value = len(self.get_successors(board, self.symbol)) - len(self.get_successors(board, self.oppSym))
+        elif self.eval_type == '2':
+            value = board.count_score(self.oppSym)
         return value
 
 
-    def get_successors(self, board, player_symbol):
-        # Write function that takes the current state and generates all successors obtained by legal moves
-        # type:(board, player_symbol) -> (list)
+    def get_successors(self, board, player_symbol) -> list:
         successors = []
 
-        #if there are no more legal moves left for the player, return empty list
-        if board.has_legal_moves_remaining(player_symbol) == False:
-            return successors
+        if not board.has_legal_moves_remaining(player_symbol):
+            return []
 
-        #if there are still legal moves left
-        #go through the whole board
-        for col in range(board.cols):
-            for row in range (board.rows):
-                #if move is legal at (col, row)
-                if board.is_legal_move(player_symbol):
-                    #make a clone of the board
-                    new_board = board.cloneOBoard()
-                    #generate a move on the new board
-                    new_board.play_move(col, row, player_symbol)
-                    #add it to list of possible moves
-                    successors.append(new_board)
+        for x in range(board.cols):
+            for y in range(board.rows):
+                if board.has_legal_moves_remaining(player_symbol):
+                    if board.is_legal_move(x, y, player_symbol):
+                        #print(x, y)
+                        newBoard = board.cloneOBoard()
+                        newBoard.play_move(x, y, player_symbol)
+                        newBoard.move = (x, y)
+                        successors.append(newBoard)
+                else:
+                    return successors
 
-        return successors
+        return successors 
 
 
     def get_move(self, board):
