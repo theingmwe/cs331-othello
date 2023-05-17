@@ -103,28 +103,30 @@ class AlphaBetaPlayer(Player):
         successors = []
 
         #if there are no more legal moves left for the player, return empty list
-        if board.has_legal_moves_remaining(player_symbol) == False:
+        if not board.has_legal_moves_remaining(player_symbol):
             return successors
-
-        #if there are still legal moves left
-        #go through the whole board
-        for col in range(board.cols):
-            for row in range (board.rows):
-                #if move is legal at (col, row)
-                if board.is_legal_move(player_symbol):
-                    #make a clone of the board
-                    new_board = board.cloneOBoard()
-                    #generate a move on the new board
-                    new_board.play_move(col, row, player_symbol)
-                    #add it to list of possible moves
-                    successors.append(new_board)
-
-        return successors
+        
+        else:
+            #if there are still legal moves left
+            #go through the whole board
+            for col in range(board.cols):
+                for row in range (board.rows):
+                    #if move is legal at (col, row)
+                    if board.is_legal_move(col, row, player_symbol):
+                        #make a clone of the board
+                        new_board = board.cloneOBoard()
+                        #generate a move on the new board
+                        new_board.play_move(col, row, player_symbol)
+                        new_board.move = (col, row)
+                        #add it to list of possible moves
+                        successors.append(new_board)
+            return successors
 
 
     def get_move(self, board):
         # Write function that returns a move (column, row) here using minimax
         # type:(board) -> (int, int)
+        # print(self.alphabeta(board))
         return self.alphabeta(board)
 
        
