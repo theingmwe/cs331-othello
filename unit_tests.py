@@ -23,15 +23,22 @@ class testPlayers(unittest.TestCase):
         s = successors[0]   
         print("First move by player 1")
         s.display() 
+
         current.eval_type = '0'
         eval0 = current.eval_board(s)
         print("eval0 piece difference", eval0)
         self.assertEqual(eval0, 3)
+
         current.eval_type = '1'
         eval1 = current.eval_board(s)
         print("eval1 mobility difference", eval1)
         self.assertEqual(eval1, 0)
-        #pdb.set_trace()
+
+        current.eval_type = '2'
+        eval2 = current.eval_board(s)
+        print("eval2 number of opposite symbol", eval2)
+        self.assertEqual(eval2, 1)
+        # pdb.set_trace()
     
 
 if __name__ == "__main__":
