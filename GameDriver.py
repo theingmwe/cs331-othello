@@ -94,4 +94,4 @@ def main():
     game.run()
 
 
-# main()
+main()

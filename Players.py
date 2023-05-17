@@ -101,7 +101,7 @@ class AlphaBetaPlayer(Player):
 
         return column, row
 
-    def max_value(self, board, alpha=-float('inf'), beta=float('inf'), depth=0) -> float:
+    def max_value(self, board, alpha=-float('inf'), beta=float('inf'), depth=0):
 
         # Keep track of the number of node seen
         self.total_nodes_seen = self.total_nodes_seen + 1
@@ -124,7 +124,7 @@ class AlphaBetaPlayer(Player):
 
         return startingValue
 
-    def min_value(self, board, alpha=-float('inf'), beta=float('inf'), depth=0) -> float:
+    def min_value(self, board, alpha=-float('inf'), beta=float('inf'), depth=0):
 
         # Keep track of the number of node seen
         self.total_nodes_seen = self.total_nodes_seen + 1
@@ -147,7 +147,7 @@ class AlphaBetaPlayer(Player):
 
         return startingValue
 
-    def eval_board(self, board) -> float:
+    def eval_board(self, board):
         value = 0
 
         if self.eval_type == 0: # H0, Piece Difference: Number of your pieces - number of opponent's pieces
@@ -160,7 +160,7 @@ class AlphaBetaPlayer(Player):
         return value
 
 
-    def get_successors(self, board, player_symbol) -> list:
+    def get_successors(self, board, player_symbol):
         successors = []
 
         #if there are no more legal moves left for the player, return empty list
@@ -189,11 +189,3 @@ class AlphaBetaPlayer(Player):
         # type:(board) -> (int, int)
         # print(self.alphabeta(board))
         return self.alphabeta(board)
-
-       
-        
-
-
-
-
-
