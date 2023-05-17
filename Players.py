@@ -149,39 +149,45 @@ class AlphaBetaPlayer(Player):
 
     def eval_board(self, board) -> float:
         value = 0
-        if self.eval_type == '0':
-            value = board.count_score(self.symbol) - board.count_score(self.oppSym)
-        elif self.eval_type == '1':
-            value = len(self.get_successors(board, self.symbol)) - len(self.get_successors(board, self.oppSym))
-        elif self.eval_type == '2':
-            value = board.count_score(self.oppSym)
+
+        if self.eval_type == 0: # H0, Piece Difference: Number of your pieces - number of opponent's pieces
+            value = board.count_score(self.symbol) - board.count_score(self.Oppsym)
+        elif self.eval_type == 1: # H1, Mobility:  Number of your legal moves - number of opponent's legal moves
+            value = board.has_legal_moves_remaining(self.symbol) - board.has_legal_moves_remaining(self.Oppsym)
+        elif self.eval_type == 2: #H2: Design your own function
+            value = board.current_score(self.symbol) + 2
+
         return value
 
 
     def get_successors(self, board, player_symbol) -> list:
         successors = []
 
+        #if there are no more legal moves left for the player, return empty list
         if not board.has_legal_moves_remaining(player_symbol):
-            return []
-
-        for x in range(board.cols):
-            for y in range(board.rows):
-                if board.has_legal_moves_remaining(player_symbol):
-                    if board.is_legal_move(x, y, player_symbol):
-                        #print(x, y)
-                        newBoard = board.cloneOBoard()
-                        newBoard.play_move(x, y, player_symbol)
-                        newBoard.move = (x, y)
-                        successors.append(newBoard)
-                else:
-                    return successors
-
-        return successors 
+            return successors
+        
+        else:
+            #if there are still legal moves left
+            #go through the whole board
+            for col in range(board.cols):
+                for row in range (board.rows):
+                    #if move is legal at (col, row)
+                    if board.is_legal_move(col, row, player_symbol):
+                        #make a clone of the board
+                        new_board = board.cloneOBoard()
+                        #generate a move on the new board
+                        new_board.play_move(col, row, player_symbol)
+                        new_board.move = (col, row)
+                        #add it to list of possible moves
+                        successors.append(new_board)
+            return successors
 
 
     def get_move(self, board):
         # Write function that returns a move (column, row) here using minimax
         # type:(board) -> (int, int)
+        # print(self.alphabeta(board))
         return self.alphabeta(board)
 
        
