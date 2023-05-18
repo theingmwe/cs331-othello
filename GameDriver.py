@@ -2,6 +2,7 @@ from Players import *
 import sys
 import OthelloBoard
 
+REPORTING_TYPE = 0
 
 class GameDriver:
     def __init__(self, p1type="human", p2type="alphabeta", num_rows=4, num_cols=4, p1_eval_type=0, p1_prune=False, p2_eval_type=0, p2_prune=False, p1_depth=8, p2_depth=8):
@@ -29,8 +30,9 @@ class GameDriver:
         self.board.initialize()
 
     def display(self):
-        print("Player 1 (", self.p1.symbol, ") score: ", \
-                self.board.count_score(self.p1.symbol))
+        # print("Player 1 (", self.p1.symbol, ") score: ", \
+        #         self.board.count_score(self.p1.symbol))
+        pass
 
     def process_move(self, curr_player, opponent):
         invalid_move = True
@@ -39,20 +41,20 @@ class GameDriver:
             if( not self.board.is_legal_move(col, row, curr_player.symbol)):
                 print("Invalid move")
             else:
-                print("Move:", [col,row], "\n")
+                # print("Move:", [col,row], "\n")
                 self.board.play_move(col,row,curr_player.symbol)
                 return
 
 
-    def run(self):
+    def run(self, reporting_type):
         current = self.p1
         opponent = self.p2
-        self.board.display()
+        # self.board.display()
 
         cant_move_counter, toggle = 0, 0
 
-        #main execution of game
-        print("Player 1(", self.p1.symbol, ") move:")
+        # main execution of game
+        # print("Player 1(", self.p1.symbol, ") move:")
         # Get a move, then display it in a while loop
         turn_count = 0
         while True:
@@ -60,9 +62,9 @@ class GameDriver:
                 turn_count += 1
                 cant_move_counter = 0
                 self.process_move(current, opponent)
-                self.board.display()
+                # self.board.display()
             else:
-                print("Can't move")
+                # print("Can't move")
                 if(cant_move_counter == 1):
                     break
                 else:
@@ -70,28 +72,38 @@ class GameDriver:
             toggle = (toggle + 1) % 2
             if toggle == 0:
                 current, opponent = self.p1, self.p2
-                print("Player 1(", self.p1.symbol, ") move:")
+                # print("Player 1(", self.p1.symbol, ") move:")
             else:
                 current, opponent = self.p2, self.p1
-                print("Player 2(", self.p2.symbol, ") move:")
+                # print("Player 2(", self.p2.symbol, ") move:")
 
         #decide win/lose/tie state
         state = self.board.count_score(self.p1.symbol) - self.board.count_score(self.p2.symbol)
-        if( state == 0):
-            print("Tie game!!")
-        elif state >0:
-            print("Player 1 Wins!")
-        else:
-            print("Player 2 Wins!")
-        print("turn count:", turn_count)
-        print("total nodes seen by p1", self.p1.total_nodes_seen)
-        print("total nodes seen by p2", self.p2.total_nodes_seen)
+        # if( state == 0):
+        #     print("Tie game!!")
+        # elif state >0:
+        #     print("Player 1 Wins!")
+        # else:
+        #     print("Player 2 Wins!")
+        # print("turn count:", turn_count)
+        # print("total nodes seen by p1", self.p1.total_nodes_seen)
+        # print("total nodes seen by p2", self.p2.total_nodes_seen)
+        if reporting_type == '0':
+            print(self.p1.total_nodes_seen + self.p2.total_nodes_seen)
+        elif reporting_type == '1':
+            if state == 0:
+                print("0")
+            elif state > 0:
+                print("1")
+            else:
+                print("2")
 
 
 def main():
     board_size = 4 
     game = GameDriver(sys.argv[1], sys.argv[2], board_size, board_size, sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7], sys.argv[8])
-    game.run()
+    REPORTING_TYPE = sys.argv[9]
+    game.run(REPORTING_TYPE)
 
 
 main()
