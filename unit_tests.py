@@ -36,7 +36,7 @@ class testPlayers(unittest.TestCase):
 
         current.eval_type = '2'
         eval2 = current.eval_board(s)
-        print("eval2 number of opposite symbol", eval2)
+        print("eval2 number of symbol", eval2)
         self.assertEqual(eval2, 1)
         # pdb.set_trace()
     

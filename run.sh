@@ -1,17 +1,17 @@
 #!/bin/sh
-echo -e "Testing search vs depth\n"
-echo "depth,pruning,heuristic,nodes"
-for I in 2 4 6 8 10 12 # Depth
-do
-  for J in 0 1 # Pruning
-  do
-    for K in 0 1 2 # Heuristic
-    do
-      NODES=$(python3 GameDriver.py alphabeta alphabeta $K $J $K $J $I $I 0)
-      echo "$I,$J,$K,$NODES"
-    done
-  done
-done
+# echo -e "Testing search vs depth\n"
+# echo "depth,pruning,heuristic,nodes"
+# for I in 2 4 6 8 10 12 # Depth
+# do
+#   for J in 0 1 # Pruning
+#   do
+#     for K in 0 1 2 # Heuristic
+#     do
+#       NODES=$(python3 GameDriver.py alphabeta alphabeta $K $J $K $J $I $I 0)
+#       echo "$I,$J,$K,$NODES"
+#     done
+#   done
+# done
 
 echo -e "Testing heuristic quality\n\n"
 echo -e "depth,h1,h2,win\n"

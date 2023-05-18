@@ -150,12 +150,13 @@ class AlphaBetaPlayer(Player):
     def eval_board(self, board):
         value = 0
 
+
         if self.eval_type == '0': # H0, Piece Difference: Number of your pieces - number of opponent's pieces
             value = board.count_score(self.symbol) - board.count_score(self.oppSym)
         elif self.eval_type == '1': # H1, Mobility:  Number of your legal moves - number of opponent's legal moves
             value = board.has_legal_moves_remaining(self.symbol) - board.has_legal_moves_remaining(self.oppSym)
         elif self.eval_type == '2': # H2: Design your own function
-            value = board.count_score(self.oppSym)
+            value = board.count_score(self.symbol)
 
         return value
 
