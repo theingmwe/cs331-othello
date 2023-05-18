@@ -155,7 +155,7 @@ class AlphaBetaPlayer(Player):
         elif self.eval_type == 1: # H1, Mobility:  Number of your legal moves - number of opponent's legal moves
             value = board.has_legal_moves_remaining(self.symbol) - board.has_legal_moves_remaining(self.Oppsym)
         elif self.eval_type == 2: #H2: Design your own function
-            value = board.current_score(self.symbol) + 2
+            value = board.current_score(self.symbol) + 1
 
         return value
 
